@@ -78,8 +78,23 @@ const folderUploadConfig = {
     compressLargeFolder: true // 是否启用大文件夹自动压缩
 };
 
-// 定义全局网关配置
+// ============================================================================================
+// !!! 修改区域开始：请在这里配置您自己的专属节点 !!!
+// 将您的节点信息作为第一个对象添加到此列表中。
+// 程序会自动测试所有网关的速度，并优先使用最快的一个。
+// 如果您以后需要更改自己的节点地址，也只需要修改下面这个对象即可。
+// ============================================================================================
 const GATEWAY_CONFIG = [
+    {
+        // 这是您的专属节点信息
+        id: 'my-custom-gateway',
+        name: '我的专属节点',
+        pingUrl: 'https://ipfs-api.921556.xyz/api/v0/version',
+        addFileUrl: 'https://ipfs-api.921556.xyz/api/v0/add?pin=true',
+        addDirUrl: 'https://ipfs-api.921556.xyz/api/v0/add?pin=true&recursive=true&wrap-with-directory=true',
+        latency: Infinity
+    },
+    // 以下是作者提供的原始公共网关，将作为备用
     {
         id: 'gw-ipfsbed-0',
         name: 'Gateway0',
@@ -97,6 +112,10 @@ const GATEWAY_CONFIG = [
         latency: Infinity
     }
 ];
+// ============================================================================================
+// !!! 修改区域结束 !!!
+// ============================================================================================
+
 let sortedGateways = []; // 用于存储排序后的网关
 
 // 异步函数：测试网关延迟并排序
@@ -275,9 +294,9 @@ $(document).ready(async () => { // 将ready函数设为异步
         });
         
         $('#dragbox').on('dragover', e => e.preventDefault())
-                     .on('dragenter', handleDragEnter)
-                     .on('dragleave', handleDragLeave)
-                     .on('drop', function(e) {
+                         .on('dragenter', handleDragEnter)
+                         .on('dragleave', handleDragLeave)
+                         .on('drop', function(e) {
             e.preventDefault();
             $('.upload').removeClass('dragenter');
             $('.upload .content .icon').css('transform', '');
@@ -728,11 +747,9 @@ $(document).ready(async () => { // 将ready函数设为异步
                     </div>
                     <div class="progress-status">0%</div>
                 </div>
-                <!-- URL display text input -->
                 <div class="url-display" style="display: none; margin-top: 8px;">
                     <input type="text" class="file-url-input" style="width: 100%; padding: 6px; border: 1px solid #dcdfe6; border-radius: 4px; box-sizing: border-box;" readonly>
                 </div>
-                <!-- Hidden inputs to store the data -->
                 <input type="hidden" class="data-url" value="">
                 <input type="hidden" class="data-cid" value="">
                 <input type="hidden" class="data-filename" value="${file.name}">
@@ -787,9 +804,9 @@ $(document).ready(async () => { // 将ready函数设为异步
         } else {
             // Use new compressed format for public files
             const fileData = {
-                c: res.Hash,        // cid
-                f: file.name,       // filename  
-                s: file.size        // size
+                c: res.Hash,         // cid
+                f: file.name,        // filename  
+                s: file.size         // size
             };
             const compressedData = base64UrlEncode(JSON.stringify(fileData));
             originalShareUrl = `${window.location.origin}${window.location.pathname.replace('index.html', '')}share.html?d=${compressedData}`;
@@ -1276,7 +1293,7 @@ async function shareBatchFiles(passphrase) { // passphrase is now an argument, m
             showToast(_t('batch-share-link-copied'), 'success');
         } else {
             showToast(_t('batch-encryption-failed'), 'error');
-            return;        
+            return;         
         }
     } else {
         // Use new compressed format for non-encrypted batch shares
@@ -1542,7 +1559,6 @@ function createHistoryItem(item) {
 // Add helper function to escape HTML
 function escapeHtml(text) {
     const map = {
-
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
@@ -1551,4 +1567,3 @@ function escapeHtml(text) {
     };
     return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
-
