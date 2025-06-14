@@ -196,8 +196,13 @@ function getFileTypeIcon(filename) {
     }
 }
 
-// Common gateway list used across the application
+// ============================================================================================
+// !!! 修改区域开始：请在这里配置您自己的专属下载网关 !!!
+// 将您的网关信息作为第一个对象添加到此列表中，它将作为默认选项显示。
+// 如果您以后需要更改自己的网关地址，也只需要修改下面这个对象即可。
+// ============================================================================================
 const commonGateways = [
+    { value: "https://ipfs-gw.921556.xyz", text: "我的专属网关" },
     { value: "https://gw.crustgw.work", text: "crustgw" },
     { value: "https://i0.img2ipfs.com", text: "img2ipfs" },
     { value: "https://cdn.ipfsscan.io", text: "cdn-ipfsscan" },
@@ -218,6 +223,10 @@ const commonGateways = [
     { value: "https://ipfs-02.ethquokkaops.io", text: "ethquokkaops-02" },
     { value: "https://filebase.truffle.wtf", text: "truffle-filebase" }
 ];
+// ============================================================================================
+// !!! 修改区域结束 !!!
+// ============================================================================================
+
 
 // Initialize common elements and listeners when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
